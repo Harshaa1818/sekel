@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import "../../App.css"
 import { addTocart } from '../Redux/slices'
@@ -10,6 +10,7 @@ const LandingPage = () => {
     const navigate = useNavigate()
     
     const [products, setProducts] = useState([])
+    useEffect(() => {
     axios.get("https://fakestoreapi.com/products")
     .then((response) => {
         setProducts(response.data)
@@ -17,11 +18,19 @@ const LandingPage = () => {
     .catch((error) => {
         console.log(error)
     })
+},[])
 
     const handleProductDetail = (e) => {
-        const productId = e.target.parentElement.parentElement.parentElement.key
-        navigate(`/product/${productId}`)
+      
+        console.log(e);
+        navigate(`/product/${e}`);
     }
+
+   
+
+        
+        
+    
 
     return(
         <div className='bodyy'>
@@ -45,7 +54,7 @@ const LandingPage = () => {
 
                         <div className='btn'>
                         
-                        <button  onClick={ handleProductDetail}>see details</button>
+                        <button onClick={()=> handleProductDetail(product.id)}>see details</button>
                         </div>
                         
                         </div>
@@ -56,6 +65,7 @@ const LandingPage = () => {
         </div>
             </div>
     )
-
 }
+
+
 export default LandingPage
