@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import React, { useState} from "react"
 
+
 const LoginPage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -17,13 +18,22 @@ const LoginPage = () => {
     }
 }
 
-    return(
-        <div>
-            <input type="text" onChange={(e)=>setUsername(e.target.value)} placeholder="Username" />
-            <input type="password" onChange={(e)=>setPassword(e.target.value)} placeholder="Password" />
-            <button onClick={handleLogin}>Login</button>
+    return (
+       <div className="containerlogin">
+         <div className="input"><h1> Login </h1></div>
+       <div className="input">
+         <input type="text" placeholder="Enter username" value={username} onChange={(e)=>setUsername(e.target.value)}/>
         </div>
-    )
+        <div className="input">
+
+        <input type="password" placeholder="Enter password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+        </div>
+        <div className="loginbutton">
+        <button onClick={handleLogin}>Login</button>
+        </div>
+        </div>
+   
+    );
 
 }
 

@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import "../../App.css"
-import { addTocart } from '../Redux/slices'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const LandingPage = () => {
-    const dispatch = useDispatch()
+    
     const navigate = useNavigate()
     
     const [products, setProducts] = useState([])
+
     useEffect(() => {
     axios.get("https://fakestoreapi.com/products")
     .then((response) => {
@@ -17,28 +17,27 @@ const LandingPage = () => {
     })
     .catch((error) => {
         console.log(error)
-    })
-},[])
+    })},[])
 
-    const handleProductDetail = (e) => {
-      
-        console.log(e);
-        navigate(`/product/${e}`);
-    }
-
-   
-
-        
-        
     
 
+    const handleProduct = (id) =>{
+        navigate(`/product/${id}`)
+
+
+    }
+
     return(
-        <div className='bodyy'>
-        <div className='cart-btn'>
-            <button onClick={()=>navigate('/cart')}>See cart</button>
-            </div>
         <div className="container" >
-            
+
+            <div className='navbar'>
+            <h1>Shop Kart</h1>
+            <button onClick={()=>navigate('/cart')}>See cart</button>
+
+            </div>
+
+            <div className='cards'>
+
             {products.map((product) => {
                 return(
                     <div className="card" key={product.id}>
@@ -47,25 +46,25 @@ const LandingPage = () => {
                         </div>
 
                         <div className='content'>
-                        <div className='price'>
 
-                        <p >Price : {product.price} $ </p>
-                        </div>
-
-                        <div className='btn'>
+                       
+                          <div className='title'>  <h1>{product.title.slice(0,15)}...</h1></div>
+                            
                         
-                        <button onClick={()=> handleProductDetail(product.id)}>see details</button>
-                        </div>
+                       
+                            <h2 className='price'>Price : {product.price} $ </h2>
+                        
+                        
+                            <button className='Submitbutton' onClick={ ()=>handleProduct(product.id)}>see details</button>
                         
                         </div>
 
                     </div>
                 )
             })} 
-        </div>
             </div>
+        </div>
     )
+
 }
-
-
 export default LandingPage
