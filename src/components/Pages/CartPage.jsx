@@ -1,49 +1,60 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+
 import axios from "axios";
 import '../../App.css'
 
+
 const CartPage = () => {
-  // const cartItems = useSelector((state) => state.cartItems)
-  const [data, setData] = useState([]);
+ 
+    const [products, setProducts] = useState([])
+   const cartItemIds =  localStorage.getItem('cart')?.split(',') 
+    // console.log(cartItemIds);
 
-  let itemIds = localStorage.getItem("cart");
-  itemIds = itemIds.split(",");
-  console.log(itemIds);
-  const uniqueItems = [...new Set(itemIds)];
-  let items = [];
+// let hs = new Set()
 
-  useEffect(() => {
-    uniqueItems.map((id) => {
-      axios
-        .get(`https://fakestoreapi.com/products/${id}`)
-        .then((res) => {
-          setData((prev) => [...prev, res.data]);
-        })
-        .catch((err) => console.log(err));
-    });
-      
-  }, []);
-  
+let uniqueIds = [...new Set(cartItemIds)]
+// console.log(uniqueIds)
 
-let hs = new Set()
-let products = []
+// for(let i=0;i<cartItemIds.length;i++){
+//     hs.add(cartItemIds[i].id)
+// }
+// for(let i=0;i<cartItemIds.length;i++){
+//     if(hs.has(cartItemIds[i].id)){
+//         uniqueIds.push(cartItemIds[i])
+//         hs.delete(cartItemIds[i].id)
+//     }
+// }
 
-for(let i=0;i<data.length;i++){
-    hs.add(data[i].id)
+useEffect(() => {
+    axios.get("https://fakestoreapi.com/products")
+    .then((response) => {
+        setProducts(response.data);
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+},[])
+let cartProducts = []
+let hs = new Set(uniqueIds)
+// console.log(hs)
+
+for(let i = 0 ; i < products.length ; i++ ){
+   if(hs.has(JSON.stringify(products[i].id))){
+    cartProducts.push(products[i])
+   }
 }
-for(let i=0;i<data.length;i++){
-    if(hs.has(data[i].id)){
-        products.push(data[i])
-        hs.delete(data[i].id)
-    }
-}
+
+// console.log(cartProducts)
+let nw;
    
 const handleRemove = (id) => {
-    const itemIds = localStorage.getItem("cart");
-     items = itemIds.split(",").filter((item) => item !== id.toString());
-    console.log(items);
-    localStorage.setItem("cart", itemIds);
+    id = Number(id)
+    nw = localStorage.getItem('cart')?.split(',')
+   console.log(nw)
+   nw = nw.filter((item) => Number(item) !== id)
+
+    localStorage.setItem('cart',nw)
+
 
 
 }
@@ -59,7 +70,7 @@ const handleRemove = (id) => {
 
         <div className='cards'>
 
-        {products.map((product) => {
+        {cartProducts && cartProducts.map((product) => {
             return(
                 <div className="card" key={product.id}>
                     <div className='image'>

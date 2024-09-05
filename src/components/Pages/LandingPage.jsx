@@ -3,23 +3,28 @@ import axios from 'axios'
 import "../../App.css"
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { responseData } from '../Redux/slices'
 
 const LandingPage = () => {
     
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     
     const [products, setProducts] = useState([])
 
     useEffect(() => {
     axios.get("https://fakestoreapi.com/products")
     .then((response) => {
-        setProducts(response.data)
+        setProducts(response.data);
+
+        
+    
     })
     .catch((error) => {
         console.log(error)
     })},[])
 
-    
+   
 
     const handleProduct = (id) =>{
         navigate(`/product/${id}`)

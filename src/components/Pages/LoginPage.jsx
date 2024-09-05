@@ -14,6 +14,7 @@ const LoginPage = () => {
     }
     else{
         alert('Login Successful')
+        localStorage.setItem('isUserLoggedIn',true)
         navigate('/user')
     }
 }
